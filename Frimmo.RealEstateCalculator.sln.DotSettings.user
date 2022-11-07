@@ -1,0 +1,6 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=79dbdb6e_002D46d6_002D4f98_002D8b2e_002Dbaff2bba3348/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="EstateProperty_Contains_GrossYield" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::87C6464B-2A21-4247-A9CE-4F4569A53C5B::net6.0::Frimmo.RealEstateCalculator.Tests.EstatePropertyTests.EstateProperty_Contains_GrossYield&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
