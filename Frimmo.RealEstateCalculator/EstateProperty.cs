@@ -2,10 +2,9 @@
 
 public class EstateProperty
 {
-    public int Id { get; set; }
     private readonly double _notariesFeesPercent =.07;
-    
-    public double Price { get; private set; }
+    public string Description { get; set; }
+    public int Price { get; private set; }
     public int Surface { get; }
     public double MensualRent { get; internal set; }
     public double AnnualRent => MensualRent * 12;
@@ -24,6 +23,11 @@ public class EstateProperty
     {
         Price = price;
         Surface = surface;
+    }
+
+    public override string ToString()
+    {
+        return $"{Description} - {FullPrice}€ - {Surface}m² - ";
     }
 
     public void SetMensualRentPrice(int mensualRentPrice)

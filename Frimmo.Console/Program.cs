@@ -3,7 +3,6 @@ using AutoMapper;
 using Frimmo.Console.Commands;
 using Frimmo.Console.Infrastructure;
 using Frimmo.RealEstateCalculator;
-using Frimmo.RealEstateCalculator.Tests;
 using Microsoft.Extensions.Configuration;
 using Spectre.Console;
 
@@ -19,7 +18,7 @@ var mapperConfiguration = new MapperConfiguration(cfg
     => cfg.CreateMap<EstateProperty, EstatePropertyDto>());
 
 var builder = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
+    .SetBasePath(_exePath)
     .AddJsonFile("appsettings.json", optional: false);
 
 IConfiguration config = builder.Build();
@@ -28,27 +27,26 @@ IConfiguration config = builder.Build();
 MarketRepository marketRepository = new MarketRepository(_exePath + "/markets.json");
 var _currentMarket = marketRepository.CurrentMarket;
 
-AnsiConsole.Markup($"Marché actuel: [red]{_currentMarket}[/]");
+AnsiConsole.WriteLine($"Marché actuel: {_currentMarket}");
 
 if (_currentMarket == null)
 {
-    var command = new ChooseMarketCommand(marketRepository.GetAll());
+    var command = new ChooseMarketCommand(marketRepository);
     command.ParseInput(args);
-    Market selectedMarket = command.Execute();
-    marketRepository.CurrentMarket = selectedMarket;
-    marketRepository.Save();
+    command.Execute();
     return;
 }
 
-var estatePropertyRepository = new EstatePropertyRepository(_exePath + "/db.json");
-estatePropertyRepository.Load();
+var _estateSimulationRepository = new EstateSimulationRepository(_exePath + "/db.json");
+_estateSimulationRepository.Load();
 
 // INPUT COMMANDS
 if (args.Length > 0 && args[0] == "--inline")
 {
-    var command = new CreateNewAnalyzeCommand();
+    var command = new CreateNewSimulationCommand();
     command.ParseInput(args);
-    command.Execute(_currentMarket);
+    EstateSimulation result = command.Execute(_currentMarket);
+    _estateSimulationRepository.AllEstateSimulations.Add(result);
     return;
 }
     
@@ -64,7 +62,7 @@ var actionChoice = AnsiConsole.Prompt(
 
 if (actionChoice == "Choisir un marché")
 {
-    var command = new ChooseMarketCommand(marketRepository.GetAll());
+    var command = new ChooseMarketCommand(marketRepository);
     command.ParseInput(args);
     command.Execute();
     return;
@@ -72,9 +70,12 @@ if (actionChoice == "Choisir un marché")
 
 if (actionChoice == "Nouvelle analyse")
 {
-    var command = new CreateNewAnalyzeCommand();
+    var command = new CreateNewSimulationCommand();
     command.ParseInput(args);
-    command.Execute(_currentMarket);
+    EstateSimulation result = command.Execute(_currentMarket);
+    
+    var saveCommand = new SaveSimulationCommand(_estateSimulationRepository);
+    saveCommand.Execute(result);
     return;
 }
 
@@ -85,5 +86,6 @@ if (actionChoice == "Créer un marché")
 
 if (actionChoice == "Compléter une analyse existante")
 {
+    var command = new EditExistingSimulationCommand(_estateSimulationRepository);
     return;
 }

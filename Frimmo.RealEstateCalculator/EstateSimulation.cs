@@ -10,12 +10,19 @@ public class EstateSimulation
     public EstateProperty Property { get; set; }
     public double CashFlow { get; set; }
     public double IdealPriceForPositiveCashflow { get; set; }
+    public EvaluationResult Result { get; set; }
+    public int Id { get; set; }
 
     public EstateSimulation(EstateProperty property, Loan loan, Market market)
     {
         Property = property;
         Loan = loan;
         Market = market;
+    }
+
+    public override string ToString()
+    {
+        return "";
     }
 
     /// <summary>
@@ -33,6 +40,8 @@ public class EstateSimulation
         evaluation.Rules.Add(CheckBankRule());
         evaluation.Rules.Add(CheckMarketRule());
 
+        Result = evaluation;
+        
         return evaluation;
     }
 

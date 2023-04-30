@@ -4,7 +4,7 @@ using Spectre.Console;
 
 namespace Frimmo.Console.Commands;
 
-public class CreateNewAnalyzeCommand
+public class CreateNewSimulationCommand
 {
     int _priceInput;
     int _surface;
@@ -37,7 +37,7 @@ public class CreateNewAnalyzeCommand
         }
     }
 
-    public void Execute(Market currentMarket)
+    public EstateSimulation Execute(Market currentMarket)
     {
         // ANALYSE
         var property = new EstateProperty(_priceInput + _renovationWorks, _surface);
@@ -51,7 +51,10 @@ public class CreateNewAnalyzeCommand
 
         var simulation = new EstateSimulation(property, loan, currentMarket);
         var result = simulation.Evaluate();
+        
         DisplayResult(simulation, result);
+        
+        return simulation;
     }
 
     public void DisplayResult(EstateSimulation simulation, EvaluationResult result)
