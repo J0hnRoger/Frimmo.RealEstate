@@ -12,5 +12,9 @@
     &lt;TestId&gt;xUnit::87C6464B-2A21-4247-A9CE-4F4569A53C5B::net6.0::Frimmo.RealEstateCalculator.Tests.EstatePropertyTests.EstateProperty_SetAgencyFees&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::87C6464B-2A21-4247-A9CE-4F4569A53C5B::net6.0::Frimmo.RealEstateCalculator.Tests.EstatePropertyTests.EstateProperty_SetLoan&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::87C6464B-2A21-4247-A9CE-4F4569A53C5B::net6.0::Frimmo.RealEstateCalculator.Tests.EstatePropertyTests.EstateProperty_SetPropertyTax&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::87C6464B-2A21-4247-A9CE-4F4569A53C5B::net6.0::Frimmo.RealEstateCalculator.Tests.EstateSimulationTests.BankRule_AppliedInEvaluation&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::87C6464B-2A21-4247-A9CE-4F4569A53C5B::net6.0::Frimmo.RealEstateCalculator.Tests.EstateSimulationTests.UnderMarketPrice_AppliedInEvaluation&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::87C6464B-2A21-4247-A9CE-4F4569A53C5B::net6.0::Frimmo.RealEstateCalculator.Tests.Scrapper.WebScrapperTests.Scrapper_ReturnLeBonCoinPageContent&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::87C6464B-2A21-4247-A9CE-4F4569A53C5B::net6.0::Frimmo.RealEstateCalculator.Tests.EstateSimulationTests.Check&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

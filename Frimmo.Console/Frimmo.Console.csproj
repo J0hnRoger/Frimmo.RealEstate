@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="12.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="Spectre.Console" Version="0.46.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Frimmo.RealEstateCalculator\Frimmo.RealEstateCalculator.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="markets.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>

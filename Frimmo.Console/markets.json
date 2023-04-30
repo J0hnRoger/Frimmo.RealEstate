@@ -1,0 +1,20 @@
+{
+  "CurrentMarket": "",
+  "AllMarkets": [
+    {
+      "Location": "Les Herbiers",
+      "SquareMeterPrice": "2000",
+      "PropertyType": 1
+    },
+    {
+      "Location": "Beaurepaire",
+      "SquareMeterPrice": 1800,
+      "PropertyType": 1
+    },
+    {
+      "Location": "Mortagne",
+      "SquareMeterPrice": 2000,
+      "PropertyType": 1
+    }
+  ]
+}

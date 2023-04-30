@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Frimmo.RealEstateCalculator\Frimmo.RealEstateCalculator.csproj" />
+      <ProjectReference Include="..\Frimmo.Scrapper\Frimmo.Scrapper.csproj" />
     </ItemGroup>
 
 </Project>

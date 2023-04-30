@@ -15,8 +15,55 @@ public class EstatePropertyTests
     [Fact]
     public void EstateProperty_Contains_GrossYield()
     {
-        var estateProperty = new EstateProperty(150000);
+        var estateProperty = new EstateProperty(150000, 100);
         estateProperty.SetMensualRentPrice(650); 
         estateProperty.GrossYieldPercent.Should().Be(5.2);
     }
+    
+    // - Les frais de notaires sont d'environ 7% en Vendée
+    [Fact]
+    public void EstateProperty_SetNotariesFees()
+    {
+        var estateProperty = GetTestEstateProperty();
+        estateProperty.NotariesFees.Should().Be(7000);
+    }
+
+    [Fact]
+    public void EstateProperty_SetRenovationsWork()
+    {
+        var estateProperty = GetTestEstateProperty();
+        estateProperty.SetRenovationWorks(100000);
+        estateProperty.Price.Should().Be(200000);
+    }
+    
+    [Fact]
+    public void EstateProperty_SetLoan()
+    {
+        var estateProperty = GetTestEstateProperty();
+        estateProperty.SetRenovationWorks(100000);
+        estateProperty.Price.Should().Be(200000);
+    }
+    
+    
+    [Fact]
+    public void EstateProperty_SetPropertyTax()
+    {
+        var estateProperty = GetTestEstateProperty();
+        estateProperty.SetPropertyTax(1500);
+        estateProperty.PropertyTax.Should().Be(1500);
+    }
+    
+    [Fact]
+    public void EstateProperty_SetAgencyFees()
+    {
+        var estateProperty = GetTestEstateProperty();
+        estateProperty.SetAgencyFeesPercent(.06);
+        estateProperty.FullPrice.Should().Be(113000);
+    }
+    
+    private EstateProperty GetTestEstateProperty()
+    {
+        return new EstateProperty(100000, 100);
+    }
+
 }
