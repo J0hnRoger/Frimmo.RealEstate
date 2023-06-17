@@ -4,21 +4,23 @@ public class EstateProperty
 {
     private readonly double _notariesFeesPercent =.07;
     public string Description { get; set; }
-    public int Price { get; private set; }
-    public int Surface { get; }
-    public double MensualRent { get; internal set; }
+    public int Price { get; set; }
+    public int Surface { get; set; }
+    public double MensualRent { get; set; }
     public double AnnualRent => MensualRent * 12;
     public double AgencyFeesPercent { get; set; }
     public double GrossYieldPercent => Math.Round(AnnualRent / Price * 100, 3);
     public double NotariesFees => Math.Round(Price * _notariesFeesPercent);
     public double AgencyFees => Math.Round(Price * AgencyFeesPercent);
     public double RenovationWork { get; set; }
-    public int PropertyTax { get; internal set; }
+    public int PropertyTax { get; set; }
     
     public int CondominiumFees { get; set; }
     public double FullPrice => Price + NotariesFees + AgencyFees + RenovationWork;
     public double AllMonthlyTaxes =>  CondominiumFees / 12 + PropertyTax / 12;
 
+    public EstateProperty() { }
+    
     public EstateProperty(int price, int surface)
     {
         Price = price;
@@ -66,6 +68,16 @@ public class EstateProperty
     public double GetGrossProfitability()
     {
         return 12 * MensualRent / Price;
+    }
+    
+    
+    /// <summary>
+    /// Retoourne la renta Net (avec travaux, frais de notaires, frais d'agence) du bien
+    /// </summary>
+    /// <returns></returns>
+    public double GetNetProfitability()
+    {
+        return AnnualRent / FullPrice;
     }
     
     /// <summary>

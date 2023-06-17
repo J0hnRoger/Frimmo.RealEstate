@@ -6,7 +6,7 @@ dotnet publish -c Release
 
 write-host '2. Publish exe in shared folder'  -ForegroundColor Green
 
-Copy-Item -Path $exePath -Destination $targetPath -Force -Recurse
+Copy-Item -Path $exePath -Destination $targetPath -Force -Recurse -Exclude @("db.json", "markets.json")
 
 write-host '3. Deployment Finished'  -ForegroundColor Green
 

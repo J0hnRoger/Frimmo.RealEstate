@@ -32,17 +32,20 @@ public class CreateNewSimulationCommand
             _surface = AnsiConsole.Ask<int>("Quel est la [green]Surface[/] du bien (pour le prix /m²)?");
             _rentPrice = AnsiConsole.Ask<int>("Quel est le [green] loyer attendu[/]?");
             _renovationWorks = AnsiConsole.Ask<int>("Quel est le [green] prix estimé des travaux[/]?");
-            _propertyTax = AnsiConsole.Ask<int>("Quel est le [green] montant de la taxe d'habitation[/]?");
+            _propertyTax = AnsiConsole.Ask<int>("Quel est le [green] montant de la taxe foncière[/]?");
             _condominiumFees = AnsiConsole.Ask<int>("Quel est le [green] montant des charges estimées[/]?");
         }
     }
 
-    public EstateSimulation Execute(Market currentMarket)
+    public EstateSimulation Execute(Market currentMarket, int loanDuration = 20, double loanInterest = 0.032, double loanInsurance = 0.0034)
     {
         // ANALYSE
-        var property = new EstateProperty(_priceInput + _renovationWorks, _surface);
+        var property = new EstateProperty(_priceInput, _surface);
         property.SetMensualRentPrice(_rentPrice);
-        var loan = new Loan(_priceInput + _renovationWorks, 20, 0.032, 0.0034);
+        var loan = new Loan(_priceInput + _renovationWorks, loanDuration, loanInterest, loanInsurance);
+        
+        AnsiConsole.WriteLine($"Prêt: {loan.DurationInMonths / 12} ans - {loan.InterestRate}% d'interêt - {loan.InsuranceRate}% d'assurance");
+
         // TODO - taxe foncière
         property.SetPropertyTax(_propertyTax);
         // TODO - travaux 
@@ -57,7 +60,7 @@ public class CreateNewSimulationCommand
         return simulation;
     }
 
-    public void DisplayResult(EstateSimulation simulation, EvaluationResult result)
+    public static void DisplayResult(EstateSimulation simulation, EvaluationResult result)
     {
         // Create a table
         var table = new Table();
@@ -71,11 +74,10 @@ public class CreateNewSimulationCommand
         {
             table.AddRow(rule.Description,
                 $"[#87005f]{(rule.IsValid ? "[green]OK[/]" : "[red]KO[/]")}[/]",
-                rule.ActualValue.ToString());
+                rule.Explanation);
         }
 
-        if (simulation.CashFlow < 0)
-            table.AddRow("Prix idéal", "", $"[green]{simulation.IdealPriceForPositiveCashflow}[/]€");
+        table.AddRow("Prix idéal", "", $"[green]{simulation.IdealPriceForPositiveCashflow}[/]€");
 
         // Render the table to the console
         AnsiConsole.Write(table);

@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Frimmo.RealEstateCalculator.Tests;
+﻿using Frimmo.RealEstateCalculator.Tests;
 
 namespace Frimmo.RealEstateCalculator;
 
@@ -22,7 +21,7 @@ public class EstateSimulation
 
     public override string ToString()
     {
-        return "";
+        return $"{Property?.Description} - {Property.Price}€ - {Property.GetGrossProfitability()}% de renta brute";
     }
 
     /// <summary>
@@ -36,24 +35,50 @@ public class EstateSimulation
         CashFlow = Property.MensualRent - Loan.MonthlyTotalPayments - Property.AllMonthlyTaxes;
 
         evaluation.Rules.Add(CheckGrossProfitability());
+        evaluation.Rules.Add(CheckNetProfitability());
         evaluation.Rules.Add(CheckCashFlowRule());
         evaluation.Rules.Add(CheckBankRule());
         evaluation.Rules.Add(CheckMarketRule());
 
         Result = evaluation;
-        
+
         return evaluation;
     }
 
     private EvaluationRule CheckGrossProfitability()
     {
         double grossProfitability = Property.GetGrossProfitability();
-        if (grossProfitability < .1f)
-            IdealPriceForPositiveCashflow = GetIdealPriceForPositiveCashFlow();
+        bool isValid = grossProfitability > .1f;
+
+        IdealPriceForPositiveCashflow = GetIdealPriceForPositiveCashFlow();
+
+        string explanation = (isValid)
+            ? $"{Math.Round(grossProfitability * 100, 2)}% au dessus des 10% annuel brute"
+            : $"{Math.Round(grossProfitability * 100, 2)}% en dessous des 10% annuel brute";
 
         return new EvaluationRule(
-            $"Pas assez rentable: {grossProfitability * 100}% en dessous de 10% annuel brute",
-            grossProfitability > .1f, grossProfitability);
+            $"Rentabilité brute ",
+            isValid, explanation);
+    }
+
+    /// <summary>
+    /// Evalue la renta net - après travaux
+    /// </summary>
+    /// <returns></returns>
+    private EvaluationRule CheckNetProfitability()
+    {
+        double netProfitability = Property.GetNetProfitability();
+        bool isValid = netProfitability > .1f;
+
+        IdealPriceForPositiveCashflow = GetIdealPriceForPositiveCashFlow();
+
+        string explanation = (isValid)
+            ? $"{Math.Round(netProfitability * 100, 2)}% au dessus des 10% annuel net"
+            : $"{Math.Round(netProfitability * 100, 2)}% en dessous des 10% annuel net(travaux/frais de notaire/frais d'agence)";
+
+        return new EvaluationRule(
+            $"Rentabilité net ",
+            isValid, explanation);
     }
 
     /// <summary>
@@ -70,18 +95,25 @@ public class EstateSimulation
 
     private EvaluationRule CheckMarketRule()
     {
+        bool isValid = Property.GetNetSquareMeterPrice() < Market.SquareMeterPrice;
+        string explanation = (isValid)
+            ? $"[green]{Property.GetNetSquareMeterPrice()}€/m²( +{Property.GetNetSquareMeterPrice() - Market.SquareMeterPrice}€/m²)[/]"
+            : $"[red]{Property.GetNetSquareMeterPrice()}€/m²({Market.SquareMeterPrice - Property.GetNetSquareMeterPrice()}€/m²)[/]";
+
         return new EvaluationRule(
             $"Market Price Rule: Le prix au m² avec travaux doit être inferieur au marché: il est de {Property.GetNetSquareMeterPrice()}€ " +
             $"contre {Market.SquareMeterPrice}€",
-            (Property.GetNetSquareMeterPrice() < Market.SquareMeterPrice),
-            Property.GetNetSquareMeterPrice() - Market.SquareMeterPrice);
+            isValid, explanation);
     }
 
     private EvaluationRule CheckCashFlowRule()
     {
+        bool isValid = CashFlow > 0;
+        string explanation = (isValid)
+            ? $"[bold green]{CashFlow}€[/]"
+            : $"[bold red]{CashFlow}€[/]";
         return new EvaluationRule($"CashFlow Rule: Un cashflow doit être positif: il est de {CashFlow}€",
-            (CashFlow > 0),
-            CashFlow);
+            (CashFlow > 0), explanation);
     }
 
     /// <summary>
@@ -90,9 +122,16 @@ public class EstateSimulation
     public EvaluationRule CheckBankRule()
     {
         bool isValid = Property.MensualRent * 0.70 > Loan.MonthlyTotalPayments;
-        double diff = Property.MensualRent * 0.70 - Loan.MonthlyTotalPayments;
+        string explanation =
+            $"Le remboursement représente {Math.Round(Loan.MonthlyTotalPayments / Property.MensualRent * 100, 2)}% des loyers";
+
         return new EvaluationRule("Règle de la banque: 70% du loyer ne couvre pas le crédit.",
             isValid,
-            diff);
+            explanation);
+    }
+
+    public void UpdateLoan()
+    {
+        Loan = new Loan((int) Property.FullPrice, Loan.DurationInMonths / 12, Loan.InterestRate, Loan.InsuranceRate);
     }
 }

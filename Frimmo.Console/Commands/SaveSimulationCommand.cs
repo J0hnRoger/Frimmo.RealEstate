@@ -20,8 +20,10 @@ public class SaveSimulationCommand
             return;
         string description = AnsiConsole.Ask<string>("Donnez une description à cette simulation pour la retrouver plus tard:");
         savingSimulation.Property.Description = description;
+        
         _repository.AllEstateSimulations.Add(savingSimulation);
         _repository.Save();
+        
         AnsiConsole.Write("Simulation sauvegardée");
     }
 }

@@ -44,5 +44,11 @@ public class EstateSimulationRepository
         AllEstateSimulations = JsonConvert.DeserializeObject<List<EstateSimulation>>(content, new JsonSerializerSettings(){
            Culture =  CultureInfo.InvariantCulture
         }) ?? new List<EstateSimulation>();
+        
+        for(int i = 0; i < AllEstateSimulations.Count; i++)
+        {
+            AllEstateSimulations[i].Id = i;
+            AllEstateSimulations[i].Evaluate();
+        };
     }
 }
